@@ -9,7 +9,7 @@ Help find the topics that have high responses (doban doesn't provie the sorting 
 
 ## what next
 - add interactive system
-- be able to save the data as csv or something else (well, my brother doeen't know sql)
+- be able to save the data as csv or something else (well, my brother doesn't know sql)
 - improve the searthing speed
 
 
