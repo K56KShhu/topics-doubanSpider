@@ -75,7 +75,7 @@ def findGroup(bs0bj):
         groupBag.add(groupUrl["href"])
 
 def extendPage(homeUrl):
-    driver = webdriver.PhantomJS(executable_path='/home/xu/00project00/python/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+    driver = webdriver.PhantomJS(executable_path='......./phantomjs')
     driver.get(homeUrl)
 
     bar = 1
