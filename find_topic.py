@@ -1,19 +1,20 @@
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
+from urllib.parse import quote
 from operator import itemgetter
+from bs4 import BeautifulSoup
 import re
 
 
 
 def getTopics(topics):
     for topic in topics:
-        times = topic.parent.next_sibling.next_sibling.next_sibling.next_sibling.get_text()
-        if times == '':
+        responses = topic.parent.next_sibling.next_sibling.next_sibling.next_sibling.get_text()
+        if responses == '':
             continue
-        times = int(times) 
-        if times > 10:
+        responses = int(responses) 
+        if responses > 10:
             L = []
-            L.append(times)
+            L.append(responses)
             L.append(topic["title"])
             L.append(topic["href"])
             topicBag.append(L)
@@ -72,7 +73,10 @@ def findGroup(Url):
         groupBag.add(groupUrl["href"])
 
 
-findGroup("https://www.douban.com/search?cat=1019&q=%E6%B0%B4%E5%BD%A9")
+search = input("Search: ")
+homeUrl = "https://www.douban.com/search?cat=1019&q=%" + quote(search)
+findGroup(homeUrl)
+
 
 for groupUrl in groupBag:
     secondUrl = getFirstPage(groupUrl)
@@ -81,6 +85,6 @@ for groupUrl in groupBag:
     else:
         getNextPage(secondUrl, page=50)
 
-
-for title in sorted(topicBag, key=itemgetter(0)):
+# show the message
+for title in sorted(topicBag, key=itemgetter(0), reverse=True):
     print(title)
