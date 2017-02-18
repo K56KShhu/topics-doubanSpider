@@ -2,6 +2,9 @@ from urllib.request import urlopen
 from urllib.parse import quote
 from operator import itemgetter
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
 import re
 
 
@@ -18,6 +21,7 @@ def getTopics(topics):
             L.append(topic["title"])
             L.append(topic["href"])
             topicBag.append(L)
+
 
 
 topicBag = []
@@ -64,19 +68,36 @@ def getNextPage(Url, page):
 
 
 groupBag = set()
-def findGroup(Url):
+def findGroup(bs0bj):
     global groupBag
-    html = urlopen(Url)
-    bs0bj = BeautifulSoup(html, "lxml")
     groupUrls = bs0bj.findAll("a", href=re.compile("https://www.douban.com/link2/.*"))
     for groupUrl in groupUrls:
         groupBag.add(groupUrl["href"])
 
+def extendPage(homeUrl):
+    driver = webdriver.PhantomJS(executable_path='/home/xu/00project00/python/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+    driver.get(homeUrl)
+
+    bar = 1
+    while True:
+        print("[%d]waiting..." % bar)
+        bar += 1
+
+        time.sleep(2)
+        try:
+            moreButton = driver.find_element(By.LINK_TEXT, "显示更多")
+            moreButton.click()
+        except:
+            break
+    pageSource = driver.page_source
+    bs0bj = BeautifulSoup(pageSource, "lxml")
+    return bs0bj
+
 
 search = input("Search: ")
-homeUrl = "https://www.douban.com/search?cat=1019&q=%" + quote(search)
-findGroup(homeUrl)
-
+homeUrl = "https://www.douban.com/search?cat=1019&q=" + quote(search)
+bs0bj = extendPage(homeUrl)
+findGroup(bs0bj)
 
 for groupUrl in groupBag:
     secondUrl = getFirstPage(groupUrl)
