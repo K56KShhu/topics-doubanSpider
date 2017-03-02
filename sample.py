@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 import re
+import csv
 
 
 
@@ -75,7 +76,7 @@ def findGroup(bs0bj):
         groupBag.add(groupUrl["href"])
 
 def extendPage(homeUrl):
-    driver = webdriver.PhantomJS(executable_path='......./phantomjs')
+    driver = webdriver.PhantomJS(executable_path='                  /phantomjs')
     driver.get(homeUrl)
 
     bar = 1
@@ -89,6 +90,7 @@ def extendPage(homeUrl):
             moreButton.click()
         except:
             break
+    driver.close()
     pageSource = driver.page_source
     bs0bj = BeautifulSoup(pageSource, "lxml")
     return bs0bj
@@ -107,5 +109,34 @@ for groupUrl in groupBag:
         getNextPage(secondUrl, page=50)
 
 # show the message
-for title in sorted(topicBag, key=itemgetter(0), reverse=True):
-    print(title)
+# for title in sorted(topicBag, key=itemgetter(0), reverse=True):
+#    print(title)
+
+
+csvFile = open("                 ","w")
+try:
+    writer = csv.writer(csvFile)
+    for topic in sorted(topicBag, key=itemgetter(0), reverse=True):
+        writer.writerow(topic)
+finally:
+    csvFile.close()
+    print("Done")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
